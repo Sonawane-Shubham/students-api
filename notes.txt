@@ -1,0 +1,196 @@
+#63 what is rest api
+representational state transefer
+it is a software that allows to application to communicate with each other over the intrenet and through different divices 
+
+What is an API?
+Application Programming Interface (API) is a software interface that allows two applications to interact with each other without any user intervention. API is a collection of software functions and procedures. In simple terms, API means a software code that can be accessed or executed. API is defined as a code that helps two different software’s to communicate and exchange data with each other.
+ 
+ It offers products or services to communicate with other products and services without having to know how they’re implemented.
+
+
+ Let see how API works using simple daily life example. Imagine that you went to a restaurant to take lunch or dinner. The waiter comes to you gives you a menu card, and you will provide personalize it order like you want a veg sandwich but without onion.
+
+After some time, you will get your order from the waiter. However, it is not that simple as it looks as there is some process that happens in between.
+
+Here, the waiter plays an important part as you will neither go to the kitchen to collect your order nor will you tell the kitchen staff what you want all this done by the waiter. 
+
+API also does the same by taking your request, and just like the waiter tell the system what you want and give a response back to you.
+
+REST api is an archetetural style for an api which used http request to access and use data.
+
+#65 Create Your Own RESTFul API in Hindi ✌ Handling POST Request in REST API using NodeJS & MongoDB 2020
+#how to create your own restful api
+1 create a folde restfulapi [REST API]
+2 in that initailize npm [npm init -y]
+then install express npm install express
+then mongoose        npm install mongoose
+then validator       npm install validator
+then src a folder and in that folder app.js
+
+
+how to handle post request in restfulapi
+const express = require("express");
+
+const app = express();
+const path = require("path");
+const Student = require("./models/students");
+require('./db/conn')
+
+const port = process.env.PORT || 8000
+app.use(express.json());
+
+//now this app can have function and properties to make express app
+//app.get(route,callback)
+// app.post("/students",(req,res)=>{
+//     const user = new Student(req.body);
+//     user.save().then(()=>{
+//         res.send(user);
+//     }).catch((err)=>{
+//         res.send(err);
+
+//     })
+//     console.log(req.body)
+// });
+//create  student
+app.post("/students",async(req,res)=>{
+    
+    console.log(req.body)
+    try{
+        const user = new Student(req.body);
+        const createUser = await user.save();
+        res.status(201).send(createUser);
+
+    }catch(err)
+    {
+        res.status(400).send(createUser);
+
+    }
+    
+    
+});
+
+app.listen(8000,()=>{
+    console.log("listening on the port 8000");
+})
+//in src>db>conn.js to make conn with MongoDB
+//in scr>models>students.js
+ and require conn file in app.js so that it can be exicute or called
+in app.js  require("./db/conn");
+
+-after successful connection we need to define schema here in models>student.js
+
+then after creation of schema for student then you need to make a project in postman for testing all the API which you will create  using get post put and delete
+-for that follow below steps
+1)open postmon
+2)new collection 
+
+
+"start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+add this dependencies in package.json file
+so that you dont need to run your project agina and again
+and then how to run
+>>npm run dev
+
+
+
+how to handle get request in restapi
+
+app.get("/students", async (req, res) => {
+    console.log(req.body)
+    try {
+          const studentData = await Student.find();
+         res.status(201).send(studentData);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+});
+
+//how to get individual record from restfulapi
+app.get("/students/:id", async (req, res) => {
+    
+    try {
+         const _id =  req.params.id;
+         const studentData = await Student.findById(_id);
+         console.log(studentData)
+         if(!studentData)
+         {
+            res.status(400).send();
+         }
+         else{
+            res.send(studentData);
+         }
+         
+    } catch (err) {
+        res.status(400).send(err);
+    }
+});
+
+
+how to handle update and patch
+
+app.patch("/students/:id", async (req, res) => {
+    
+    try {
+         const _id = req.params.id;
+         const updateStudent = await Student.findByIdAndUpdate(_id,req.body,{new:true})
+         res.send(updateStudent);
+         
+    } catch (err) {
+        res.status(400).send(err);
+    }
+});
+
+handling delete request in restapi
+
+
+app.delete("/students/:id", async (req, res) => {
+    
+    try {
+         const _id = req.params.id;
+         const deleteStudent = await Student.findByIdAndDelete(_id)
+         if(!req.params.id)
+         {
+            return res.status(400).send(deleteStudent);
+         }
+        res.send(deleteStudent);
+         
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
+
+ #6: Adding Express Router in RESTful API in Hindi in 2020
+
+how to add router to your site using express router in other word we can say that how to add express rounter to your site
+in the following article we are going to learn about that 
+there are three step to add rounter in your restAPI 
+
+
+1 create router
+const rounter = new express.Router();
+
+
+2 we need to define the router in our restAPI in seprate file oro in app.js
+router.get("/newroute", async (req, res) => {
+    console.log(req.body)
+    try {
+          const studentData = await Student.find();
+         res.status(201).send(studentData);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+});
+but using above syntax will not give you output fot that third and most improtant step is to tell our there is router 
+3 regiter router
+in app.js 
+
+const studentRouter = require("path fo your router file");
+const studentRouter = require(".routers/student");
+
+app.use(router);
+ex : app.use(studentRouter);
+
+
+how to add all the router in a seperate folder
+create a routers folder in the src and in that folder creat a file and export the rounter
